@@ -15,6 +15,9 @@ public abstract class Sprite{
         this.height = height;
     }
 
+    public int getX(){return this.x;}
+    public int getY(){return this.y;}
+
     public abstract void paint(Graphics graphics);
     public abstract void setupGraphics();
    

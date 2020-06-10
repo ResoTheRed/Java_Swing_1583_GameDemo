@@ -91,15 +91,14 @@ public class Player extends Sprite{
     }
     
     /*Move and repaint should be updated */
-
     private void repaint(int x, int y, DrawCanvas canvas){
-        collision();
+        wallCollision();
         //Repaint only the affected areas, not the entire JFrame for efficiency
         canvas.repaint(x,y, Settings.PLAYER_WIDTH,Settings.PLAYER_HEIGHT);
         canvas.repaint(super.x,super.y, Settings.PLAYER_WIDTH,Settings.PLAYER_HEIGHT);
     }
 
-    private void collision(){
+    private void wallCollision(){
         if(super.y > Settings.CANVAS_HEIGHT-Settings.PLAYER_HEIGHT)
             super.y = Settings.CANVAS_HEIGHT-Settings.PLAYER_HEIGHT;
         if(super.y < 0)

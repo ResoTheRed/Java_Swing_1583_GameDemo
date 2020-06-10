@@ -3,16 +3,16 @@ import java.awt.event.*; // Using AWT's event classes and listener interfaces
 import javax.swing.*;    // Using Swing's components and containers
 
 
-public class View extends JFrame implements WindowListener{
+public class View extends JFrame{
 
     private DrawCanvas canvas;
     private Player player;
     private Enemy enemy;
-    private boolean isRunning;
+    //private boolean isRunning;
 
     public View(){
         setupPlayer();
-        enemy = Enemy.generateEnemy();
+        setupEnemy();
         setupCanvas();
         addKeyListener(new TAdapter());
         //playerMovementListener();
@@ -21,12 +21,31 @@ public class View extends JFrame implements WindowListener{
 
     public void update(){
         player.updateSprite(canvas);
+        enemy.updateSprite(canvas);
+        trackEnemy();
     }
 
     private void setupPlayer(){
         //construct player given x,y,hieght,width
         player = new Player(Settings.PLAYER_START_X,Settings.PLAYER_START_Y,
                             Settings.PLAYER_HEIGHT,Settings.PLAYER_WIDTH);
+    }
+
+    private void setupEnemy(){
+        if(enemy==null)
+            enemy = Enemy.generateEnemy();
+        else
+            enemy.setCoord(Enemy.generateCoord());
+        enemy.setPlayerCoord(player.getX(), player.getY());
+        enemy.setVelocity();
+    }
+
+    private void trackEnemy(){
+        if(enemy.getX()>Settings.ENEMY_OUT_X||enemy.getX()<-Settings.ENEMY_OUT){
+            setupEnemy();
+        }else if(enemy.getY()>Settings.ENEMY_OUT_Y||enemy.getY()<-Settings.ENEMY_OUT){
+            setupEnemy();
+        }
     }
 
     private void setupCanvas(){
@@ -49,8 +68,6 @@ public class View extends JFrame implements WindowListener{
         pack();             //Pack all of the components in the JFrame
         setVisible(true);   //Render the JFrame
         requestFocus();     // "super" JFrame request focus to recieve KeyEvent
-
-        addWindowListener(this);
     }
     
     //alter to change delta instead of move rate
@@ -78,41 +95,7 @@ public class View extends JFrame implements WindowListener{
 
 
 
-    //This event is delivered after the window has been closed as the result of a call to dispose.
-    public void windowClosed(WindowEvent event){
-        this.isRunning=false;
-    }
-
-    //This event is delivered when the user attempts to close the window from the window's system menu.
-    public void windowClosing(WindowEvent e) {}
-    //The window opened event. This event is delivered only the first time a window is made visible.
-    public void windowOpened(WindowEvent e) {}
-    //This event is delivered when the window has been changed from a normal to a minimized state.
-    public void windowIconified(WindowEvent e) {}
-    //This event is delivered when the window has been changed from a minimized to a normal state.
-    public void windowDeiconified(WindowEvent e) {}
-    //This event is delivered when the Window becomes the active Window. Only a Frame or a Dialog can be the active Window.
-    public void windowActivated(WindowEvent e) {}
-    //This event is delivered when the Window is no longer the active Window. Only a Frame or a Dialog can be the active Window.
-    public void windowDeactivated(WindowEvent e) {}
-    //This event is delivered when the Window becomes the focused Window, which means that the Window, or one of its subcomponents, 
-    //will receive keyboard events.
-    public void windowGainedFocus(WindowEvent e) {}
-    //This event is delivered when a Window is no longer the focused Window, which means keyboard events will no longer be delivered
-    // to the Window or any of its subcomponents.
-    public void windowLostFocus(WindowEvent e) {}
-    //This event is delivered when a Window's state is changed by virtue of it being iconified, maximized etc.
-    public void windowStateChanged(WindowEvent e) {}
-
-
-    public void setViewIsRunning(boolean bool){
-        this.isRunning = bool;
-    }
-
-    public boolean getViewIsRunning(){
-        return this.isRunning;
-    }
-
+   
     private class TAdapter extends KeyAdapter {
 
         @Override
