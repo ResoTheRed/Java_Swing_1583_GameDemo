@@ -2,8 +2,11 @@
 
 public class Model{
 
-    public Model(){
+    private Time time;
+    private View view;    
 
+    public Model(){
+        time = new Time();
     }
 
     /*
@@ -16,8 +19,33 @@ public class Model{
         d. return to a.
     */
 
+    //Starts a new thread and runs the game loop in it.
+    public void runGame(){
+        Thread loop = new Thread(){
+            public void run(){
+                gameLoop();
+            }
+        };
+        loop.start();
+    }
+    
     public void gameLoop(){
-        
+        view = new View();
+        boolean isRunning = true;
+        int count = 0;
+        while(isRunning){    
+            time.updateTime();
+            //time.getInterpolation();
+            /*
+                gameLoop Content here
+            */
+            count++;
+            if(count%10==0)
+                System.out.print(count%60+" ");
+            time.updateFrame();
+            //if(count > 1000)
+            //    break;
+        }    
     }
 
 }
