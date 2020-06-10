@@ -7,13 +7,20 @@ public class View extends JFrame implements WindowListener{
 
     private DrawCanvas canvas;
     private Player player;
+    private Enemy enemy;
     private boolean isRunning;
 
     public View(){
         setupPlayer();
+        enemy = Enemy.generateEnemy();
         setupCanvas();
-        playerMovementListener();
+        addKeyListener(new TAdapter());
+        //playerMovementListener();
         setupJFrame();
+    }
+
+    public void update(){
+        player.updateSprite(canvas);
     }
 
     private void setupPlayer(){
@@ -25,7 +32,8 @@ public class View extends JFrame implements WindowListener{
     private void setupCanvas(){
         //Set up the drawing Canvas (JPanel)
         canvas = new DrawCanvas();
-        canvas.setPlayer(this.player);
+        canvas.addSprite(this.player);
+        canvas.addSprite(this.enemy);
         canvas.setPreferredSize(new Dimension(Settings.CANVAS_WIDTH,Settings.CANVAS_HEIGHT));
     
     }
@@ -60,6 +68,16 @@ public class View extends JFrame implements WindowListener{
         });
     }
 
+
+
+
+
+
+
+
+
+
+
     //This event is delivered after the window has been closed as the result of a call to dispose.
     public void windowClosed(WindowEvent event){
         this.isRunning=false;
@@ -86,7 +104,7 @@ public class View extends JFrame implements WindowListener{
     //This event is delivered when a Window's state is changed by virtue of it being iconified, maximized etc.
     public void windowStateChanged(WindowEvent e) {}
 
-    
+
     public void setViewIsRunning(boolean bool){
         this.isRunning = bool;
     }
@@ -95,5 +113,17 @@ public class View extends JFrame implements WindowListener{
         return this.isRunning;
     }
 
+    private class TAdapter extends KeyAdapter {
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            player.keyReleased(e);
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            player.keyPressed(e);
+        }
+    }
 
 }

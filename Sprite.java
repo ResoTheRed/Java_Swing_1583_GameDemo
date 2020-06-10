@@ -16,6 +16,7 @@ public abstract class Sprite{
     }
 
     public abstract void paint(Graphics graphics);
+    public abstract void setupGraphics();
    
 }
 

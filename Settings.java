@@ -20,8 +20,13 @@ public class Settings{
     public static final int PLAYER_WIDTH = 64;
     public static final int PLAYER_START_X = CANVAS_WIDTH / 2;
     public static final int PLAYER_START_Y = CANVAS_HEIGHT / 2;
-    public static final int PLAYER_SPEED = 12;
+    public static final int PLAYER_SPEED = 5;
 
+    //Enemy's Sprite  Constants
+    public static final String ENEMY_FILE_NAME = "Images/Star.png";
+    public static final int ENEMY_HEIGHT = 64;
+    public static final int ENEMY_WIDTH = 64;
+    public static final int[] ENEMY_CENTER = {ENEMY_WIDTH/2, ENEMY_HEIGHT/2};
     
 
     

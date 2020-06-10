@@ -39,9 +39,10 @@ public class Model{
             /*
                 gameLoop Content here
             */
-            count++;
-            if(count%10==0)
-                System.out.print(count%60+" ");
+            view.update();
+            // count++;
+            // if(count%10==0)
+            //     System.out.print(count%60+" ");
             time.updateFrame();
             //if(count > 1000)
             //    break;

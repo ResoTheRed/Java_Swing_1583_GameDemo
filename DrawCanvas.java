@@ -11,7 +11,7 @@ public class DrawCanvas extends JPanel{
         sprites = new ArrayList<Sprite>();
     }
 
-    public void setPlayer(Sprite sprite){
+    public void addSprite(Sprite sprite){
         sprites.add(sprite);
     }
 
