@@ -1,5 +1,6 @@
 import java.awt.*;  // Using awt's graphics and Color functions
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.net.URL;
 import javax.swing.*;
 
@@ -10,7 +11,7 @@ public class Player extends Sprite{
     public Player(int x, int y, int width, int height){
         super(x,y,width,height);
         super.bg_color = Settings.WHITE;
-        setUpGraphics();
+        setupGraphics();
     }
 
     public void paint(Graphics graphics){
@@ -19,7 +20,7 @@ public class Player extends Sprite{
         graphics.drawImage(super.image,x,y,null);
     }
 
-    public void setUpGraphics(){
+    public void setupGraphics(){
         ImageIcon iconPlayer = null;
         URL imgURL = getClass().getClassLoader().getResource(Settings.PLAYER_FILE_NAME);
         if(imgURL != null){
@@ -56,17 +57,48 @@ public class Player extends Sprite{
             }break;
         }
     }
+
+    public void keyPressed(KeyEvent e){
+        int key = e.getKeyCode();
+        if(key==KeyEvent.VK_LEFT)
+            deltaX = -Settings.PLAYER_SPEED;
+        if(key==KeyEvent.VK_RIGHT)
+            deltaX = Settings.PLAYER_SPEED;
+        if(key==KeyEvent.VK_UP)
+            deltaY = -Settings.PLAYER_SPEED;
+        if(key==KeyEvent.VK_DOWN)
+            deltaY = Settings.PLAYER_SPEED;
+    }
+
+    public void keyReleased(KeyEvent e){
+        int key = e.getKeyCode();
+        if(key==KeyEvent.VK_LEFT)
+            deltaX = 0;
+        if(key==KeyEvent.VK_RIGHT)
+            deltaX = 0;
+        if(key==KeyEvent.VK_UP)
+            deltaY = 0;
+        if(key==KeyEvent.VK_DOWN)
+            deltaY = 0;
+    }
+
+    public void updateSprite(DrawCanvas canvas){
+        int savedX = super.x;
+        int savedY = super.y;
+        super.x += deltaX;
+        super.y += deltaY;
+        repaint(savedX, savedY,canvas);
+    }
     
     /*Move and repaint should be updated */
-
     private void repaint(int x, int y, DrawCanvas canvas){
-        collision();
+        wallCollision();
         //Repaint only the affected areas, not the entire JFrame for efficiency
         canvas.repaint(x,y, Settings.PLAYER_WIDTH,Settings.PLAYER_HEIGHT);
         canvas.repaint(super.x,super.y, Settings.PLAYER_WIDTH,Settings.PLAYER_HEIGHT);
     }
 
-    private void collision(){
+    private void wallCollision(){
         if(super.y > Settings.CANVAS_HEIGHT-Settings.PLAYER_HEIGHT)
             super.y = Settings.CANVAS_HEIGHT-Settings.PLAYER_HEIGHT;
         if(super.y < 0)
